@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>滑桿特效</title>
+    <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+    <style>
+        #draggable {
+            width: 40em;
+            padding: 0 1em;
+        }
+
+        #draggable ul li {
+            margin: 1em 0;
+            padding: 0.5em 0;
+        }
+
+        * html #draggable ul li {
+            height: 1%;
+        }
+
+        #draggable ul li span.ui-icon {
+            float: left;
+        }
+
+        #draggable ul li span.count {
+            font-weight: bold;
+        }
+    </style>
+    <style>
+        .Slider_bog_body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .Slider01_body {
+            position: relative;
+            width: 1000px;
+            /* overflow: hidden; */
+            /* width: 50%; */
+        }
+
+        .Slider01 {
+            position: absolute;
+            padding: 50px;
+            /* display: flex; */
+            flex-direction: column;
+            align-items: center;
+            top: 0;
+            left: 0;
+            z-index: 99;
+            width: 50%;
+            overflow: hidden;
+        }
+
+        .Slider02 {
+            position: absolute;
+            padding: 50px;
+            /* display: flex; */
+            flex-direction: column;
+            align-items: center;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .text01 {
+            background-color: #fff;
+        }
+
+        .text02 {
+            background-color: #fff;
+        }
+
+        .justify {
+            text-align: justify;
+            text-justify: inter-ideograph;
+        }
+
+        .d-flex {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 900px;
+        }
+
+        .img01 {
+            width: 900px;
+            max-width: inherit;
+        }
+
+        .img02 {
+            width: 900px;
+            max-width: inherit;
+        }
+
+        /* ---------------- */
+        .Slider_btn_body {
+            width: 1000px;
+        }
+
+        .Slider_btn {
+            width: 105px;
+            z-index: 1500;
+        }
+
+        .btn_body {
+            display: flex;
+            flex-direction: row;
+            /* justify-content: space-between; */
+            align-items: center;
+        }
+
+        .btn01 {
+            height: 700px;
+            width: 50px;
+            /* box-shadow: 5px 5px 5px 5px #cccccc; */
+            /* box-shadow: 10px 30px 2px rgba(126, 125, 125, 0.4); */
+        }
+
+
+        /* .btn01_color {
+            width: 50px;
+            background-color: rgb(140, 140, 141);
+        } */
+
+        .btn02 {
+            height: 50px;
+            width: 60px;
+            padding-left: 10px;
+        }
+
+        .btn03 {
+            height: 50px;
+            width: 60px;
+            padding-right: 10px;
+        }
+
+        /* -------------- */
+        .hidden01 {
+            width: -50%;
+            overflow: hidden;
+        }
+
+        .hidden02 {
+            width: 50%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="Slider_bog_body">
+        <div class="Slider01_body">
+            <div class="hidden01">
+                <div class="Slider01">
+                    <div class="d-flex">
+                        <p class="text01 justify">第一左側文字</p>
+                        <p class="text02 justify">第一右側文字</p>
+                    </div>
+                    <img class="img01" src="./01.jpg" alt="">
+
+                </div>
+            </div>
+            <div class="hidden02">
+                <div class="Slider02">
+                    <div class="d-flex">
+                        <p class="text01 justify">第二左側文字</p>
+                        <p class="text02 justify">第二右側文字</p>
+                    </div>
+                    <img class="img02" src="./03.jpg" alt="">
+
+                </div>
+            </div>
+        </div>
+        <!-- <div class="Slider_btn_body"> -->
+        <div class="Slider_btn" id="draggable">
+            <div class="btn_body">
+                <img class="btn03" src="./SVG/左箭頭.svg" alt="">
+                <!-- <div class="btn01_color"> -->
+                <img class="btn01" src="./SVG/中線02.svg" alt="">
+                <!-- </div> -->
+                <img class="btn02" src="./SVG/右箭頭.svg" alt="">
+            </div>
+        </div>
+        <!-- </div> -->
+    </div>
+
+    <script>
+        // $(img01).css('width', '50%');
+        // $(Slider02).css('width', '50%');
+    </script>
+
+    <script src="//apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <script>
+        $(function () {
+            var $start_counter = $("#event-start"),
+                $drag_counter = $("#event-drag"),
+                $stop_counter = $("#event-stop"),
+                counts = [0, 0, 0];
+
+            $("#draggable").draggable({
+                start: function () {
+                    counts[0]++;
+                    updateCounterStatus($start_counter, counts[0]);
+                },
+                drag: function () {
+                    counts[1]++;
+                    var x = $("#draggable").offset().top;
+                    var y = $("#draggable").offset().left;
+                    var t = `(${x},${y})`;
+                    updateCounterStatus($drag_counter, t);
+                },
+                stop: function () {
+                    counts[2]++;
+                    updateCounterStatus($stop_counter, counts[2]);
+                }
+            });
+
+            function updateCounterStatus($event_counter, new_count) {
+                // 首先更新视觉状态...
+                if (!$event_counter.hasClass("ui-state-hover")) {
+                    $event_counter.addClass("ui-state-hover")
+                        .siblings().removeClass("ui-state-hover");
+                }
+                // ...然后更新数字
+                $("span.count", $event_counter).text(new_count);
+            }
+        });
+    </script>
+</body>
+
+</html>
