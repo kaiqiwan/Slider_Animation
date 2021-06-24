@@ -50,17 +50,15 @@
     <script src="//apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
     <script>
+
         $(function () {
+            $slide_left = jQuery(".Slider01");
+            $image_left = jQuery(".Slider01 img");
             $("#draggable").draggable({
                 axis: "x",
-                drag: function () {
-                    var y = $("#draggable").offset().left;
-                    var $width = (y - 350);
-                    if ($width <= 0) {
-                        $width = 0;
-                    }
-                    $(".Slider01").css('width', `${$width}`);
-
+                drag: function (event, ui) {
+                    var percent = ((ui.position.left + 265) / $image_left.width() * 90) + 0.8;
+                    $slide_left.css("width", percent + '%');
                 }
             });
         });
